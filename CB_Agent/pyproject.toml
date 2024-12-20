@@ -1,0 +1,38 @@
+ [tool.poetry]
+name = "Curriculum Builder"
+version = "0.1.0"
+description = "A Curriculum Builder for NERDC"
+authors = ["Francis-Alfred Michaelangelo"]
+
+ [tool.poetry.dependencies]
+ python = ">=3.10,<=3.13"
+ crewai = {extras = ["tools"], version = "^0.76.9"}
+ tools = "^0.1.9"
+ python-dotenv = "1.0.0"
+ pdfplumber = "^0.11.4"
+ pandas = "^2.2.3"
+ pinecone-client = "^5.0.1"
+ pymupdf = "^1.24.13"
+ transformers = "^4.46.2"
+ python-docx = "^1.1.2"
+ duckduckgo-search = "^6.3.3"
+ pydantic = "^2.9.2"
+ torch = "1.12.1"
+ pyyaml = "^6.0.2"
+ exa-py = "^1.6.0"
+ markdown2 = "^2.5.1"
+ fastapi = "^0.115.4"
+ uvicorn = "^0.32.0"
+ python-multipart = "^0.0.17"
+
+ [tool.pyright]
+ useLibraryCodeForTypes = true
+ exclude = [".cache"]
+
+ [tool.ruff]
+ select = ['E', 'W', 'F', 'I', 'B', 'C4', 'ARG', 'SIM']
+ ignore = ['W291', 'W292', 'W293']
+
+ [build-system]
+ requires = ["poetry-core>=1.0.0"]
+ build-backend = "poetry.core.masonry.api"

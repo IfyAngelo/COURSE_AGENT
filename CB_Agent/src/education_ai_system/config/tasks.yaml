@@ -1,0 +1,342 @@
+#tasks.yaml
+
+context_retrieval_task:
+  description: >
+    Your primary responsibility is to validate the user query and retrieve relevant metadata and context from the Pinecone database. Follow these steps:
+
+    1. **Validation**:
+       - Confirm that the specified {subject}, {grade_level}, and {topic} exist in the Pinecone database.
+       - Perform similarity checks for partial matches when exact matches are not found.
+       - Ensure the query aligns with the educational scope of the system (e.g., curriculum-related topics).
+
+    2. **Context Retrieval**:
+       - If the query is valid, retrieve all relevant metadata and contextual information from the Pinecone database.
+       - Extract key data points, such as:
+         - Relevant text chunks.
+         - Subject, topic, and grade-level associations.
+         - Any additional tags or classifications in the metadata.
+
+    3. **Alternatives Suggestion**:
+       - If the query is invalid (e.g., missing or non-matching data):
+         - Generate a list of valid alternatives based on the closest matches in the Pinecone database.
+         - Suggest corrections or similar options to help the user refine their query.
+
+    Ensure that your output aligns with the overall system's goals of guiding subsequent tasks to produce accurate and relevant educational content.
+
+  expected_output: >
+    A comprehensive JSON object with the following structure:
+    - **Validation Status**:
+      - A Boolean flag indicating whether the query is valid.
+      - If invalid, include a message explaining why and suggest valid alternatives.
+    - **Retrieved Metadata and Context**:
+      - An array of metadata objects, each containing:
+        - Relevant text chunk (text).
+        - Associated subject (string).
+        - Associated topic (string).
+        - Grade level (string).
+    - **Suggested Alternatives (if applicable)**:
+      - A list of valid subjects, grade levels, and topics from the database.
+
+  example_inputs:
+    - subject: "Civic Education"
+      grade_level: "Primary Three"
+      topic: "National Consciousness"
+
+  example_outputs:
+    - validation_status: true
+      retrieved_metadata:
+        - text: "National consciousness is the awareness of being a member of a community."
+          subject: "Civic Education"
+          topic: "National Consciousness"
+          grade_level: "Primary Three"
+        - text: "Civic responsibility is a core element of national consciousness."
+          subject: "Civic Education"
+          topic: "National Consciousness"
+          grade_level: "Primary Three"
+      alternatives: []
+
+    - validation_status: false
+      message: "The specified topic 'Advanced Physics' does not exist for 'Civic Education' in 'Primary Three'."
+      alternatives:
+        - subject: "Science"
+          grade_level: "Primary Four"
+          topic: "Basic Physics"
+        - subject: "Civic Education"
+          grade_level: "Primary Three"
+          topic: "National Symbols"
+
+
+lesson_plan_task:
+  description: >
+    Your task is to develop a comprehensive and well-structured lesson plan based on the provided educational data. The lesson plan must be tailored to meet Nigerian academic standards and effectively engage students. Follow these steps:
+
+    1. **Analyze Provided Data**:
+       - Examine the subject, grade level, and topic to ensure alignment with the Nigerian curriculum standards.
+       - Incorporate relevant metadata and contextual information provided by the system.
+
+    2. **Design the Lesson Plan**:
+       - Ensure the lesson plan adheres strictly to the curriculum's learning outcomes and objectives.
+       - Include specific and actionable content that avoids generalizations.
+       - Incorporate teaching strategies, classroom setup, and differentiated approaches to address diverse learner needs.
+
+    3. **Enhance Engagement and Retention**:
+       - Include culturally relevant examples, interactive activities, and multimedia resources.
+       - Structure the plan to promote active participation, collaboration, and critical thinking.
+
+    4. **Organize the Plan into the Following Structure**:
+       - **Teacher's Name**: Include the teacher's name if provided, or leave a placeholder.
+       - **Date and Duration**: Specify the lesson date and duration.
+       - **Grade Level and Class Size**: Indicate the grade level and approximate class size.
+       - **Curriculum Standards and Syllabus**: Align with Nigerian curriculum standards and specify the syllabus.
+       - **Topic and Keywords**: Include the main topic and key terms to introduce.
+       - **Learning Objectives**:
+         - Provide differentiated objectives for students at varying levels (e.g., All will, Most will, Some will).
+       - **Key Terms**: Highlight terms that students must understand.
+       - **Resources Required**:
+         - List all necessary materials, including multimedia, hands-on tools, or textbooks.
+       - **Detailed Lesson Activities**:
+         - **Starter Activity**: Include an engaging introduction to the topic (e.g., questions, videos, brainstorming).
+         - **Main Activities**: Provide a detailed breakdown of teaching strategies, group activities, and discussions.
+         - **Plenary Activity**: Conclude with a wrap-up session to reflect on the lesson and reinforce learning.
+       - **Success Criteria**:
+         - Specify measurable criteria to determine if learning objectives are met.
+       - **Homework/Independent Study**:
+         - Assign tasks for students to practice or extend their learning beyond the classroom.
+
+  expected_output: >
+    A structured and detailed lesson plan in the following format:
+
+    - **Title**: Lesson Plan - {subject}, {topic}, {grade_level}
+    - **Teacher**:
+    - **Date**: 
+    - **Duration**: 
+    - **Grade Level**: {grade_level}
+    - **Class Size**: 
+    - **Curriculum Standards and Syllabus**: Nigerian curriculum aligned with national standards.
+    - **Learning Objectives**:
+      - **All will**: Basic level objectives for all students.
+      - **Most will**: Intermediate objectives for the majority of students.
+      - **Some will**: Advanced objectives for high-achieving students.
+    - **Keywords**: 
+    - **Resources**: 
+    - **Lesson Activities**:
+      - **Starter Activity**: 
+      - **Main Activities**: 
+      - **Plenary Activity**: 
+    - **Success Criteria**: 
+    - **Homework/Independent Study**: 
+
+  example_inputs:
+    - subject: "Civic Education"
+      grade_level: "Primary Three"
+      topic: "National Consciousness"
+
+  example_outputs:
+    - title: "Lesson Plan - Civic Education, Primary Three"
+      teacher: "John Doe"
+      date: "2024-11-15"
+      duration: "45 minutes"
+      grade_level: "Primary Three"
+      class_size: "30 students"
+      curriculum: "Nigerian curriculum aligned with national standards."
+      learning_objectives:
+        all_will: "Understand the concept of national consciousness."
+        most_will: "Explain the importance of unity and diversity in a nation."
+        some_will: "Analyze historical examples of national unity."
+      keywords: ["National Consciousness", "Unity", "Diversity"]
+      resources: ["Textbooks", "Video on unity in Nigeria", "Worksheet"]
+      lesson_activities:
+        starter_activity: "Watch a video on national symbols."
+        main_activities: 
+          - "Discuss the video and ask students to identify symbols they recognize."
+          - "Group activity: Students create a chart of national symbols and their significance."
+        plenary_activity: "Students share their charts and reflect on the importance of unity."
+      success_criteria:
+        - "Students can identify at least three national symbols."
+        - "Students can explain the concept of national consciousness."
+      homework: "Write a paragraph on how you can promote unity in your community."
+
+
+scheme_of_work_task:
+  description: >
+    Your primary responsibility is to create a detailed and term-based scheme of work for the specified {subject}, {grade_level}, and {topic}. Follow these steps:
+
+    1. **Alignment with Standards**:
+       - Ensure all content adheres to Nigerian academic standards for the specified {subject}, {grade_level}, and {topic}.
+       - Structure the scheme to reflect the term’s syllabus while incorporating clear, measurable objectives.
+
+    2. **Weekly Organization**:
+       - Break down the term into weeks, detailing specific topics and subtopics to be covered each week.
+       - Highlight key themes or focus areas for each week, ensuring progression and logical sequencing.
+       - Include guidance on teaching methods, relevant materials, and subtopics to reinforce learning.
+
+    3. **Assessments**:
+       - Incorporate mid-term and full-term assessments.
+       - Ensure assessments align with the topics covered up to that point and evaluate core learning objectives.
+
+    4. **Avoid Generalizations**:
+       - Ensure weekly topics and subtopics are specific, actionable, and measurable.
+       - Provide clear and practical instructions that teachers can implement effectively.
+
+  expected_output: >
+    A structured table outlining the scheme of work with the following components:
+    
+    - **Teacher's Name**: (to be filled by the teacher).
+    - **Subject**: {subject}.
+    - **Topic**: {topic}.
+    - **Grade Level**: {grade_level}.
+    - **Term and Session**: Specify term (e.g., First Term) and session (e.g., 2024/2025).
+
+    **Scheme Table**:
+    | WEEK | MAIN TOPIC              | SUB-TOPICS/KEY THEMES                       | TEACHING METHOD/RESOURCES          |
+    |------|-------------------------|--------------------------------------------|-------------------------------------|
+    | 1    | Nigeria's Location      | Geographic position, boundaries, and political divisions | Map analysis, discussion, diagrams |
+    | 2    | Physical Geography      | Relief, drainage, and climatic zones       | Case studies, multimedia, group work|
+    | ...  | Continue weekly breakdown | Cover topics relevant to the syllabus      |                                     |
+    | 6    | Mid-Term Assessment     | Conduct a formative assessment on covered topics | Assessment sheets, quizzes         |
+    | 12   | Full-Term Assessment    | Summative assessment and review of term    | Tests, reflection sessions          |
+
+    At the end of the table:
+    - Include a summary of learning outcomes expected for the term.
+    - Suggest additional resources for teachers to prepare.
+
+  example_inputs:
+    - subject: "Civic Education"
+      grade_level: "Primary Three"
+      topic: "National Consciousness"
+
+  example_outputs:
+    - teacher_name: "Ms. Jane Doe"
+      subject: "Civic Education"
+      topic: "National Consciousness"
+      grade_level: "Primary Three"
+      term_session: "First Term, 2024/2025"
+      scheme_table:
+        - week: 1
+          main_topic: "Understanding National Consciousness"
+          sub_topics: "Definition of National Consciousness, Importance to society"
+          teaching_method_resources: "Lecture, video, class discussion"
+        - week: 2
+          main_topic: "National Symbols"
+          sub_topics: "Nigerian flag, coat of arms, national anthem"
+          teaching_method_resources: "Hands-on demonstration, multimedia presentation"
+        - week: 6
+          main_topic: "Mid-Term Assessment"
+          sub_topics: "Assessment of Weeks 1-5 topics"
+          teaching_method_resources: "Assessment sheets, quizzes"
+        - week: 12
+          main_topic: "Full-Term Assessment"
+          sub_topics: "Review of all term topics"
+          teaching_method_resources: "Summative tests, group reflection"
+    - summary_learning_outcomes: >
+        By the end of the term, students will:
+        - Understand the importance of National Consciousness and its relevance to society.
+        - Identify and explain key national symbols of Nigeria.
+        - Participate in discussions on civic responsibilities and cultural pride.
+    - additional_resources: >
+        - Suggested videos on national symbols.
+        - Printable worksheets for group activities.
+        - Reference: Nigerian Civic Education textbook for Primary Three.
+
+
+lesson_notes_task:
+  description: >
+    Your primary responsibility is to generate detailed and culturally relevant lesson notes based on the output provided by the Scheme of Work agent. 
+
+    Follow these steps to complete your task:
+    1. **Input Context**:
+       - Use the weekly topics and subtopics provided by the Scheme of Work task.
+       - Align the lesson notes with Nigerian academic standards, ensuring relevance to {subject}, {grade_level}, and {topic}.
+
+    2. **Content Creation**:
+       - For each weekly topic and its subtopics, develop content in the format of a blogpost or article.
+       - Ensure each week's notes:
+         - Start with an engaging introduction to the weekly topic.
+         - Provide detailed explanations for each subtopic.
+         - Include practical examples, relatable anecdotes, or cultural references relevant to Nigerian classrooms.
+         - End with a clear summary and reflective prompts.
+
+    3. **Structured Notes**:
+       - Ensure every week’s lesson notes adhere to the following structure:
+         - **Introduction**: Briefly introduce the topic and its importance.
+         - **Detailed Content for Subtopics**: Provide clear explanations, teaching points, and relevant examples for each subtopic.
+         - **Class Exercises**: Include 2-3 exercises or discussion prompts to assess understanding.
+         - **Homework/Independent Study**: Provide tasks that students can complete at home to reinforce learning.
+
+    4. **Consistency with Scheme of Work**:
+       - Ensure that the lesson notes strictly follow the topics and subtopics outlined in the Scheme of Work task output.
+       - Verify that each subtopic has detailed content aligned with its weekly objective.
+
+    5. **Quality Assurance**:
+       - Write in a professional tone, ensuring readability and engagement.
+       - Structure the notes such that they can be used as the sole teaching resource, with minimal modifications needed by teachers.
+
+  expected_output: >
+    A set of weekly lesson notes compiled into a cohesive and comprehensive document. Each week's content must be structured like a high-quality blogpost or article, formatted as follows:
+
+    - **Teacher's Name**: 
+    - **Subject**: {subject}
+    - **Grade Level**: {grade_level}
+    - **Term**: 
+    - **Topic**: 
+    - **Weekly Sub-Topics**: List subtopics for each week.
+
+    **Weekly Notes Structure**:
+    - **Week:
+      - **Introduction**:
+        A paragraph introducing the weekly topic, its relevance, and its importance to students.
+      - **Subtopics**:
+        For each subtopic under the weekly topic:
+        - **Subtopic Title**:
+          - Detailed content explaining the subtopic.
+          - Include examples, anecdotes, or cultural references to make the material relatable.
+      - **Class Exercises**:
+        1. Exercise or question related to the weekly topic or subtopics.
+        2. Discussion prompt or collaborative activity.
+      - **Homework/Independent Study**:
+        A take-home task or project aligned with the weekly topic.
+
+  example_inputs:
+    - subject: "Civic Education"
+      grade_level: "Primary Three"
+      topic: "National Consciousness"
+      scheme_of_work_output: 
+        weekly_topics: 
+          - week: 1
+            title: "Introduction to National Consciousness"
+            subtopics: ["What is National Consciousness?", "Importance of National Unity"]
+          - week: 2
+            title: "Symbols of National Unity"
+            subtopics: ["National Flag", "National Anthem", "Pledge"]
+
+  example_outputs: >
+    - Week 1: Introduction to National Consciousness
+      - **Introduction**
+        National consciousness is the awareness of belonging to a larger community or nation. It instills a sense of unity and shared purpose, critical for building a strong, cohesive society.
+      - **Subtopics**
+        - **What is National Consciousness?**
+          National consciousness refers to the shared sense of identity and responsibility among members of a nation. It involves understanding one's role in the community and valuing cultural heritage and diversity.
+        - **Importance of National Unity**
+          National unity ensures peace and stability. It fosters mutual respect, collaboration, and the collective effort to achieve societal goals.
+      - **Class Exercises**
+        1. Discuss the importance of national consciousness in modern Nigeria.
+        2. List examples of national symbols that promote unity in Nigeria.
+      - **Homework/Independent Study**
+        Write a short essay on how national consciousness can promote development in Nigeria.
+
+    - Week 2: Symbols of National Unity
+      - **Introduction**
+        National symbols represent the ideals, values, and unity of a country. They serve as reminders of shared history and aspirations.
+      - **Subtopics**
+        - **National Flag**
+          The Nigerian flag, designed by Michael Taiwo Akinkunmi, is a symbol of peace and unity, with green representing agriculture and white representing peace.
+        - **National Anthem**
+          The anthem inspires pride and responsibility among citizens, emphasizing love for the nation and dedication to its progress.
+        - **Pledge**
+          Reciting the pledge reminds Nigerians of their commitment to upholding national values.
+      - **Class Exercises**
+        1. Identify the colors of the Nigerian flag and explain their meanings.
+        2. Write the first verse of the National Anthem and discuss its significance.
+      - **Homework/Independent Study**
+        Create a poster showcasing the national symbols of Nigeria and their meanings.
+      
