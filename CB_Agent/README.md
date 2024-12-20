@@ -2,6 +2,8 @@
 
 This project is an AI-powered curriculum builder designed to assist educators in generating schemes of work, lesson plans, and lesson notes based on Nigerian academic standards. The system leverages machine learning and natural language processing tools, such as Pinecone for vector similarity search and Exa API for contextual web searches, to retrieve relevant educational materials and metadata, improving the content generation process. This tool is especially useful for creating structured and culturally relevant lesson materials tailored to specific subjects, grade levels, and topics.
 
+DEMO VIDEO: https://drive.google.com/drive/folders/1lxo_1fJu5XEEWobbPsFpiGVCrNtrX8oa?usp=drive_link
+
 ---
 
 ## Table of Contents
